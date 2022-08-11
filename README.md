@@ -1,6 +1,6 @@
-# Fullstack Open 2022 return answers for Dr. Jaska and rajuruoho
+## Fullstack Open 2022 exercise submissions for Dr. Jaska and rajuruoho
 
-Unless stated otherwise everything was done in pairwork regardless of git authors
+Unless stated otherwise everything was done in pairwork regardless of git authors.
 
 Collaborators:
 
