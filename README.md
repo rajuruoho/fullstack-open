@@ -4,6 +4,7 @@ Made in collaboration with:
 
 @rajuruoho
 
+<style>
 .photos {
   display: inline-block;
   position: relative;
@@ -12,6 +13,7 @@ Made in collaboration with:
   overflow: hidden;
   border-radius: 50%;
 }
+</style>
 
 <div class="photos">
 <a href="https://github.com/rajuruoho"> 
