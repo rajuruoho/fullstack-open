@@ -1,0 +1,10 @@
+title FullstackMOOC 0.6
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/spa
+selain-->palvelin: [{content: "test", date: "2022-08-11"}]
+palvelin-->selain: HTTP 201 [{message: "note created"}]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note
