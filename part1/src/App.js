@@ -17,6 +17,20 @@ const App = () => {
     setBad(bad + 1)
   }
 
+  const getTotal = () => {
+    return (good + neutral + bad)
+  }
+
+  // weird average where good = 1, neutral = 0, bad = -1
+  // I could only come up with calculating it through an offset
+  const getAverage = () => {
+    return (((good*3+neutral*2+bad*1) / (good+neutral+bad)) - 2)
+  }
+
+  const getPercentage = () => {
+    return ((good / (good+neutral+bad) ) * 100)
+  }
+
   return (
     <div>
         <h1>give feedback</h1>
@@ -27,6 +41,9 @@ const App = () => {
         <p>good {good} </p>
         <p>neutral {neutral} </p>
         <p>bad {bad} </p>
+        <p>all {getTotal()} </p>
+        <p>average {getAverage()}</p>
+        <p>positive {getPercentage()} % </p>
     </div>
   )
 }
