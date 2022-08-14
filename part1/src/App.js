@@ -12,6 +12,7 @@ const StatisticLine = (props) => {
     </tr>
   )
 }
+
 const Statistics = (props) => {
 
   const getTotal = () => {
@@ -68,6 +69,8 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.'
   ]
+  
+  const [points, setPoints] = useState([])
 
   const handleGoodClick = () => {
     setGood(good + 1)
@@ -85,6 +88,23 @@ const App = () => {
     setAnecdote(Math.floor(Math.random() * (anecdotes.length)))
   }
 
+  const getAnecdoteVotes = () => {
+    return points[selectedAnecdote]
+  }
+
+  const handleVoteAnecdote = () => {
+    if (!(points)) {
+      const copy = new Uint8Array(anecdotes.length)
+      //const copy = [0, 0, 0, 0, 0, 0, 0]
+      copy[selectedAnecdote] += 1
+    }
+    
+      const copy = [...points]
+      copy[selectedAnecdote] += 1
+    
+    setPoints(copy)
+  }
+
   return (
     <div>
         <h1>give feedback</h1>
@@ -92,8 +112,10 @@ const App = () => {
         <Button handleClick={() => handleNeutralClick()} text="neutral" />
         <Button handleClick={() => handleBadClick()} text="bad" />
         <Statistics good={good} neutral={neutral} bad={bad} />
-        <h2>Ahecdote of the day</h2>
+        <h2>Anecdote of the day</h2>
 	<p>{anecdotes[selectedAnecdote]}</p>
+        <p>has {getAnecdoteVotes()} votes </p>
+        <Button handleClick={() => handleVoteAnecdote()} text="vote" />
         <Button handleClick={() => handleRandomAnecdote()} text="random anecdote" />
     </div>
   )
