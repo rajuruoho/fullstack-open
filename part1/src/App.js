@@ -88,8 +88,17 @@ const App = () => {
     setAnecdote(Math.floor(Math.random() * (anecdotes.length)))
   }
 
-  const getAnecdoteVotes = () => {
-    return points[selectedAnecdote]
+  const getAnecdoteVotes = (props) => {
+    return points[props.id]
+  }
+
+  const getMostVotedAnecdoteID = () => {
+    let mostVotedID = 0
+
+    for (let i = 0 ; i<anecdotes.length ; i++) {
+      if (points[mostVotedID] < points[i]) mostVotedID = i
+    }
+
   }
 
   const handleVoteAnecdote = () => {
@@ -99,8 +108,8 @@ const App = () => {
       copy[selectedAnecdote] += 1
     }
     
-      const copy = [...points]
-      copy[selectedAnecdote] += 1
+    const copy = [...points]
+    copy[selectedAnecdote] += 1
     
     setPoints(copy)
   }
@@ -114,9 +123,12 @@ const App = () => {
         <Statistics good={good} neutral={neutral} bad={bad} />
         <h2>Anecdote of the day</h2>
 	<p>{anecdotes[selectedAnecdote]}</p>
-        <p>has {getAnecdoteVotes()} votes </p>
+        <p>has {getAnecdoteVotes(selectedAnecdote)} votes </p>
         <Button handleClick={() => handleVoteAnecdote()} text="vote" />
         <Button handleClick={() => handleRandomAnecdote()} text="random anecdote" />
+        <h2>Anecdote with the most votes</h2>
+        <p>{anecdotes[getMostVotedAnecdoteID()]} </p>
+        <p>has {getAnecdoteVotes(getMostVotedAnecdoteID)} votes </p>
     </div>
   )
 }
