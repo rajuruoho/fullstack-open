@@ -35,12 +35,16 @@ const Statistics = (props) => {
     return (
       <div>
           <h2>statistics</h2>
-          <StatisticLine text={"good"} value={props.good} />
-          <StatisticLine text={"neutral"} value={props.neutral} />
-          <StatisticLine text={"bad"} value={props.bad} />
-          <StatisticLine text={"all"} value={getTotal()} />
-          <StatisticLine text={"average"} value={getAverage()} />
-          <StatisticLine text={"positive"} value={getPercentage()} />
+          <table>
+	    <tbody>
+              <StatisticLine text={"good"} value={props.good} />
+              <StatisticLine text={"neutral"} value={props.neutral} />
+              <StatisticLine text={"bad"} value={props.bad} />
+              <StatisticLine text={"all"} value={getTotal()} />
+              <StatisticLine text={"average"} value={getAverage()} />
+              <StatisticLine text={"positive"} value={getPercentage()} />
+            </tbody>
+          </table>
       </div>
     )
   }
@@ -70,7 +74,7 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.'
   ]
   
-  const [points, setPoints] = useState([])
+  const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
 
   const handleGoodClick = () => {
     setGood(good + 1)
@@ -88,30 +92,31 @@ const App = () => {
     setAnecdote(Math.floor(Math.random() * (anecdotes.length)))
   }
 
-  const getAnecdoteVotes = (props) => {
-    return points[props.id]
+  const getAnecdoteVotes = (id) => {
+    return points[id]
   }
 
   const getMostVotedAnecdoteID = () => {
+/*
     let mostVotedID = 0
 
     for (let i = 0 ; i<anecdotes.length ; i++) {
       if (points[mostVotedID] < points[i]) mostVotedID = i
     }
-
+    return mostVotedID
+*/
+    return points.indexOf(Math.max(...points))
   }
 
   const handleVoteAnecdote = () => {
-    if (!(points)) {
-      const copy = new Uint8Array(anecdotes.length)
-      //const copy = [0, 0, 0, 0, 0, 0, 0]
-      copy[selectedAnecdote] += 1
-    }
-    
     const copy = [...points]
     copy[selectedAnecdote] += 1
-    
+
     setPoints(copy)
+  }
+
+  const HasVotes = (props) => {
+    return <p>has {props.votes} votes </p>
   }
 
   return (
@@ -123,12 +128,12 @@ const App = () => {
         <Statistics good={good} neutral={neutral} bad={bad} />
         <h2>Anecdote of the day</h2>
 	<p>{anecdotes[selectedAnecdote]}</p>
-        <p>has {getAnecdoteVotes(selectedAnecdote)} votes </p>
+        <HasVotes votes={getAnecdoteVotes(selectedAnecdote)} />
         <Button handleClick={() => handleVoteAnecdote()} text="vote" />
         <Button handleClick={() => handleRandomAnecdote()} text="random anecdote" />
         <h2>Anecdote with the most votes</h2>
         <p>{anecdotes[getMostVotedAnecdoteID()]} </p>
-        <p>has {getAnecdoteVotes(getMostVotedAnecdoteID)} votes </p>
+        <HasVotes votes={getAnecdoteVotes(getMostVotedAnecdoteID())} />
     </div>
   )
 }
