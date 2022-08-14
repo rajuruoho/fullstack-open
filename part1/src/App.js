@@ -6,7 +6,7 @@ const Statistics = (props) => {
     return (props.good + props.neutral + props.bad)
   }
 
-  // weird average where good = 1, neutral = 0, bad = -1
+  // Weird average where good = 1, neutral = 0, bad = -1
   // I could only come up with calculating it through an offset
   const getAverage = () => {
     return (((props.good*3+props.neutral*2+props.bad*1) / (props.good+props.neutral+props.bad)) - 2)
@@ -16,17 +16,30 @@ const Statistics = (props) => {
     return ((props.good / (props.good+props.neutral+props.bad) ) * 100)
   }
 
-  return (
-    <div>
+  // Check if we have any feedback or not
+  if (props.good + props.neutral + props.bad)
+  {
+    return (
+      <div>
+          <h2>statistics</h2>
+          <p>good {props.good} </p>
+          <p>neutral {props.neutral} </p>
+          <p>bad {props.bad} </p>
+          <p>all {getTotal()} </p>
+          <p>average {getAverage()}</p>
+          <p>positive {getPercentage()} % </p>
+      </div>
+    )
+  }
+  else
+  {
+    return (
+      <div>
         <h2>statistics</h2>
-        <p>good {props.good} </p>
-        <p>neutral {props.neutral} </p>
-        <p>bad {props.bad} </p>
-        <p>all {getTotal()} </p>
-        <p>average {getAverage()}</p>
-        <p>positive {getPercentage()} % </p>
-    </div>
-  )
+        <p>No feedback given</p>
+      </div>
+    )
+  }
 }
 const App = () => {
   const [good, setGood] = useState(0)
