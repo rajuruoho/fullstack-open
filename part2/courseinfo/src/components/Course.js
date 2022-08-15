@@ -12,8 +12,9 @@ const Part = ({ part }) => {
   }
   
   const Course = ({course}) => {
-    const lista = course.parts.map(part => part.exercises)
-    const numbers = lista.reduce(Summa)
+    //const lista = course.parts.map(part => part.exercises)
+    //const numbers = lista.reduce(Summa)
+    //total of {numbers} exercises
     return (
       <div>
         <h1>{course.name}</h1>
