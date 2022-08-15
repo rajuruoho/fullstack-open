@@ -1,60 +1,63 @@
-const Header = (props) => {
+const Part = ({ part }) => {
   return (
-    <>
-      <h1>{props.course}</h1>
-    </>
+    <tr>
+      <td>{part.name}</td>
+      <td>{part.exercises}</td>
+    </tr>
   )
 }
-const Part = (props) => {
+
+const Summa = (first, second) => {
+  return first+second
+}
+
+const Course = ({course}) => {
+  const lista = course.parts.map(part => part.exercises)
+  const numbers = lista.reduce(Summa)
   return (
-    <>
-      <p>{props.part} {props.exercises}</p>
-    </>
+    <div>
+      <h1>{course.name}</h1>
+      <table>
+        <tbody>
+          {course.parts.map(part => <Part key={part.id} part={part}/>)}
+        </tbody>
+      </table>
+      <p><b>total of {course.parts.map(part => part.exercises).reduce(Summa)} exercises </b></p>
+    </div>
   )
 }
-const Content = (props) => {
-  return (
-    <>
-      <Part part={props.parts[0].name} exercises={props.parts[0].exercises} />
-      <Part part={props.parts[1].name} exercises={props.parts[1].exercises} />
-      <Part part={props.parts[2].name} exercises={props.parts[2].exercises} />
-    </>
-  )
-}
-const Total = (props) => {
-  return (
-    <>
-      <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} </p>
-    </>
-  )
-}
+
+      //<p>total of {(course.map(getExercises([],course.parts).reduce(Summa)} exercises</p>
 
 const App = () => {
   const course = {
     name: 'Half Stack application development',
+    id: 1,
     parts: [
       {
         name: 'Fundamentals of React',
-        exercises: 10
+        exercises: 10,
+        id: 1
       },
       {
         name: 'Using props to pass data',
-        exercises: 7
+        exercises: 7,
+        id: 2
       },
       {
         name: 'State of a component',
-        exercises: 14
+        exercises: 14,
+        id: 3
       }
     ]
   }
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <Course course={course} />
     </div>
   )
 }
 
 export default App
+
