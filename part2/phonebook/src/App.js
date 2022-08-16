@@ -10,13 +10,13 @@ const App = () => {
     ]);
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
-    const [newSearch, setNewSearch] = useState(true)
+    const [newSearch, setNewSearch] = useState('')
     
     const addPerson = (event) => {
     event.preventDefault()
     //const names = persons.map(person => person.name)
-    //console.log(persons.map(person => person.name).includes(newName))
     //console.log()
+    //console.log(persons.map(person => person.name).includes(newName))
     if(persons.map(person => person.name).includes(newName))
     {
         window.alert(`${newName} is already added to phonebook`);
@@ -36,7 +36,8 @@ const App = () => {
     //ei tee järkevää
     const handleSearchChange = (event) => {setNewSearch(event.target.value)}
 
-    const personsToShow = newSearch ? persons : persons.filter(person => person.name.toLocaleLowerCase.includes(newSearch))
+    console.log(persons[1].name.toLocaleLowerCase())
+    const personsToShow = newSearch ? persons.filter(person => person.name.toLocaleLowerCase().includes(newSearch)) : persons 
 
     /*
     const dada () => {
