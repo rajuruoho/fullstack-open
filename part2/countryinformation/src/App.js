@@ -2,8 +2,9 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 const App = () => {
+    const [newSearch, setNewSearch] = useState('')
     const [countries, setCountries] = useState([])
-    const [newSearch, setNewSearch] = useState('Finland')
+    const [matchingCountries, setMatchingCountries] = useState([])
     
     useEffect(() => {
       axios
@@ -13,38 +14,58 @@ const App = () => {
         })
     }, [])
     
-    /*
-    const addPerson = (event) => {
-    event.preventDefault()
-    if(persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase()))
-    {
-        window.alert(`${newName} is already added to phonebook`);
-        return
+    const handleSearchChange = (event) => {
+        setNewSearch(event.target.value)
+        setMatchingCountries(countries.filter(country => country.name.common.toLowerCase().includes(newSearch.toLowerCase())))
     }
-    const noteObject = {
-      name: newName,
-      number: newNumber
-    }
-    setPersons(persons.concat(noteObject))
-    setNewName('')
-    setNewNumber('')
-    }
-    */
 
-    const handleSearchChange = (event) => {setNewSearch(event.target.value)}
+    const countMatchingCountries = () => {
+        if (matchingCountries.length > 10 || matchingCountries.length == 0) {
+            return false
+        }
+        else
+        {
+            return true
+        }
+    }
+	/*
+                <ul>
+                  {matchingCountries[0].languages.map((language, i) =>
+                    <li key={i}>
+                      {language[i]}
+                    </li>
+                  )}
+                </ul>
+        */	
+
+    const fetchCountryInformation = () => {
+        if (matchingCountries.length == 1) {
+            return (
+              <div>
+                <h1>{matchingCountries[0].name.common}</h1>
+                <p> capital {matchingCountries[0].capital[0]}</p>
+                <p>area {matchingCountries[0].area}</p>
+                <img alt={matchingCountries[0].name.common} flag src={matchingCountries[0].flags[0]} />
+              </div>
+            )
+        }
+        else
+        {
+            return (
+              <p>"maita ois täs"</p>
+            )
+        }
+    }
 
     //ei vielä toimi oikein. Puuttuu, ehto, että milloin näyttää
-    const countriesToShow = newSearch === '' ? countries.filter(person => person.name.toLowerCase().includes(newSearch)) : countries
+    const countriesToShow = countMatchingCountries ? fetchCountryInformation : "too many matches, please be more specific"
 
   return (
     <div>
       find countries <input value={newSearch} onChange={handleSearchChange}/>
-      <div>
-        tahan sitten vaihtuva osio
-      </div>
+      <div>{countriesToShow()}</div>
     </div>
   )
-
 }
 
 export default App
