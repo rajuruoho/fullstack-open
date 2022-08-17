@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Person from './components/Person'
+import Filter from './components/Filter'
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -14,10 +15,7 @@ const App = () => {
     
     const addPerson = (event) => {
     event.preventDefault()
-    //const names = persons.map(person => person.name)
-    //console.log()
-    //console.log(persons.map(person => person.name).includes(newName))
-    if(persons.map(person => person.name).includes(newName))
+    if(persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase()))
     {
         window.alert(`${newName} is already added to phonebook`);
         return
@@ -33,24 +31,14 @@ const App = () => {
     
     const handleNameChange = (event) => {setNewName(event.target.value)}
     const handleNumberChange = (event) => {setNewNumber(event.target.value)}
-    //ei tee järkevää
     const handleSearchChange = (event) => {setNewSearch(event.target.value)}
 
-    console.log(persons[1].name.toLocaleLowerCase())
-    const personsToShow = newSearch ? persons.filter(person => person.name.toLocaleLowerCase().includes(newSearch)) : persons 
-
-    /*
-    const dada () => {
-      return
-    }
-    */
-
-  //<p>{persons.map(person => <Person key={person.id} person ={person}/>)}</p>
+    const personsToShow = newSearch === '' ? persons : persons.filter(person => person.name.toLocaleLowerCase().includes(newSearch.toLowerCase()))  
   
   return (
     <div>
       <h2>Phonebook</h2>
-        filter shown with<input value={newSearch} onChange={handleSearchChange}/>
+        <Filter newSearch = {newSearch} handleSearchChange={handleSearchChange}/>
       <h2>Add a new</h2>  
       <form onSubmit={addPerson}>
         <div>
@@ -60,7 +48,7 @@ const App = () => {
           number: <input value={newNumber} onChange={handleNumberChange}/>
         </div>
         <div>
-            <button type="submit">add</button>
+          <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
