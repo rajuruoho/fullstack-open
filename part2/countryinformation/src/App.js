@@ -1,22 +1,19 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import Filter from './components/Filter'
-import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
 
 const App = () => {
-    const [persons, setPersons] = useState([]);
-    const [newName, setNewName] = useState('')
-    const [newNumber, setNewNumber] = useState('')
-    const [newSearch, setNewSearch] = useState('')
+    const [countries, setCountries] = useState([])
+    const [newSearch, setNewSearch] = useState('Finland')
     
     useEffect(() => {
       axios
-        .get('http://localhost:3001/persons')
+        .get('https://restcountries.com/v3.1/all')
         .then(response => {
-          setPersons(response.data)
+          setCountries(response.data)
         })
     }, [])
+    
+    /*
     const addPerson = (event) => {
     event.preventDefault()
     if(persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase()))
@@ -32,23 +29,22 @@ const App = () => {
     setNewName('')
     setNewNumber('')
     }
-    
-    const handleNameChange = (event) => {setNewName(event.target.value)}
-    const handleNumberChange = (event) => {setNewNumber(event.target.value)}
+    */
+
     const handleSearchChange = (event) => {setNewSearch(event.target.value)}
+
+    //ei vielä toimi oikein. Puuttuu, ehto, että milloin näyttää
+    const countriesToShow = newSearch === '' ? countries.filter(person => person.name.toLowerCase().includes(newSearch)) : countries
 
   return (
     <div>
-      <h2>Phonebook</h2>
-        <Filter newSearch = {newSearch} handleSearchChange={handleSearchChange}/>
-      <h2>Add a new</h2>  
-        <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
-      <h2>Numbers</h2>
-      <Persons newSearch={newSearch} persons={persons} />
+      find countries <input value={newSearch} onChange={handleSearchChange}/>
+      <div>
+        tahan sitten vaihtuva osio
+      </div>
     </div>
   )
 
 }
 
 export default App
-
