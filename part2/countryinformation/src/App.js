@@ -78,7 +78,7 @@ const App = () => {
     }
 
     const countriesToShow = countMatchingCountries() ? fetchCountryInformation : palautus
-    
+
   return (
     <div>
       find countries <input value={newSearch} onChange={handleSearchChange}/>
