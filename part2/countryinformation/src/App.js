@@ -5,6 +5,11 @@ const App = () => {
     const [newSearch, setNewSearch] = useState('')
     const [countries, setCountries] = useState([])
     const [matchingCountries, setMatchingCountries] = useState([])
+
+    const buttonClick = (input) => {
+      setNewSearch(input)
+      setMatchingCountries(countries.filter(country => country.name.common.toLowerCase().includes(input.toLowerCase())))
+    }
     
     useEffect(() => {
       axios
@@ -14,11 +19,6 @@ const App = () => {
         })
     }, [])
     
-    const handleSearchChange = (event) => {
-        setNewSearch(event.target.value)
-        setMatchingCountries(countries.filter(country => country.name.common.toLowerCase().includes(event.target.value.toLowerCase())))
-    }
-
     const countMatchingCountries = () => {
         if (matchingCountries.length > 10 || matchingCountries.length == 0) {
             return false
@@ -58,6 +58,9 @@ const App = () => {
                   {Object.values(matchingCountries).map((country, i) =>
                     <li key={i}>
                       {country.name.common}
+                        <button onClick={() => buttonClick(country.name.common)}>
+			  show
+                        </button>
                     </li>
                   )}
                 </ul>
@@ -72,6 +75,11 @@ const App = () => {
           <p>too many matches, please be more specific</p>
         </div>
       )
+    }
+
+    const handleSearchChange = (event) => {
+        setNewSearch(event.target.value)
+        setMatchingCountries(countries.filter(country => country.name.common.toLowerCase().includes(event.target.value.toLowerCase())))
     }
 
     const countriesToShow = countMatchingCountries() ? fetchCountryInformation : palautus
