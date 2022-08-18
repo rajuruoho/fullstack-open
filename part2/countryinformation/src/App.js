@@ -8,7 +8,6 @@ const App = () => {
     
     useEffect(() => {
       axios
-        //pitäsköhän tää hakea omalta JSON servulta kuitenkin?
         .get('https://restcountries.com/v3.1/all')
         .then(response => {
           setCountries(response.data)
@@ -21,7 +20,6 @@ const App = () => {
     }
 
     const countMatchingCountries = () => {
-      console.log(matchingCountries.length)
         if (matchingCountries.length > 10 || matchingCountries.length == 0) {
             return false
         }
@@ -30,31 +28,24 @@ const App = () => {
             return true
         }
     }
-	/*
-                  <ul>
-                  {matchingCountries[0].languages.map((i, language) =>
-                    <li key={i}>
-                      {language[i]}
-                    </li>
-                  )}
-                </ul>
-                  <ul>
-                  <li>{matchingCountries[0].languages.fin}</li>
-                </ul>
-
-        */	
 
     const fetchCountryInformation = () => {
-      //console.log(matchingCountries[0].languages[0])
-      //`${newName} is already added to phonebook`
         if (matchingCountries.length === 1) {
-          const altName = `${matchingCountries[0].name.common}'s flag`
+            const altName = `${matchingCountries[0].name.common}'s flag`
+
             return (
               <div>
                 <h1>{matchingCountries[0].name.common}</h1>
                 <p> capital {matchingCountries[0].capital[0]}</p>
                 <p>area {matchingCountries[0].area}</p>
                 <p><b>languages:</b></p>
+                <ul>
+                  {Object.values(matchingCountries[0].languages).map((language, i) =>
+                    <li key={i}>
+                      {language}
+                    </li>
+                  )}
+                </ul>
                 <img alt={altName} src={matchingCountries[0].flags.png} />
               </div>
             )
@@ -63,7 +54,13 @@ const App = () => {
         {
             return (
               <div>
-                <p>"maita ois täs"</p>
+                <ul>
+                  {Object.values(matchingCountries).map((country, i) =>
+                    <li key={i}>
+                      {country.name.common}
+                    </li>
+                  )}
+                </ul>
               </div>
             )
         }
@@ -79,12 +76,13 @@ const App = () => {
 
     const countriesToShow = countMatchingCountries() ? fetchCountryInformation : palautus
 
-  return (
-    <div>
-      find countries <input value={newSearch} onChange={handleSearchChange}/>
-      <div>{countriesToShow()}</div>
-    </div>
-  )
+    return (
+      <div>
+        find countries <input value={newSearch} onChange={handleSearchChange}/>
+        <div>{countriesToShow()}</div>
+      </div>
+    )
 }
 
 export default App
+
