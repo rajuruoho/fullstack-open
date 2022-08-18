@@ -46,14 +46,16 @@ const App = () => {
 
     const fetchCountryInformation = () => {
       //console.log(matchingCountries[0].languages[0])
+      //`${newName} is already added to phonebook`
         if (matchingCountries.length === 1) {
+          const altName = `${matchingCountries[0].name.common}'s flag`
             return (
               <div>
                 <h1>{matchingCountries[0].name.common}</h1>
                 <p> capital {matchingCountries[0].capital[0]}</p>
                 <p>area {matchingCountries[0].area}</p>
                 <p><b>languages:</b></p>
-                <img alt={matchingCountries[0].name.common} flag src={matchingCountries[0].flags.png} />
+                <img alt={altName} src={matchingCountries[0].flags.png} />
               </div>
             )
         }
@@ -75,8 +77,8 @@ const App = () => {
       )
     }
 
-    //ei vielä toimi oikein. Puuttuu, ehto, että milloin näyttää
-    const countriesToShow = countMatchingCountries ? fetchCountryInformation : palautus
+    const countriesToShow = countMatchingCountries() ? fetchCountryInformation : palautus
+    
   return (
     <div>
       find countries <input value={newSearch} onChange={handleSearchChange}/>
