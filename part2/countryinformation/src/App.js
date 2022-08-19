@@ -13,7 +13,7 @@ const App = () => {
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${api_key}`
 
         // avoid spamming the API with duplicate requests
-        if (currentWeather == 0) {
+        if (currentWeather === 0) {
           axios
             .get(`${url}`)
             .then(response => {
@@ -35,7 +35,7 @@ const App = () => {
     const valueChangeHandle = (inputCountryName) => {
         setNewSearch(inputCountryName)
         const countryList = countries.filter(country => country.name.common.toLowerCase().includes(inputCountryName.toLowerCase()))
-        if (countryList.length == 1) {
+        if (countryList.length === 1) {
             getCurrentWeather(countryList[0].capital[0])
         }
         setMatchingCountries(countryList)
@@ -54,7 +54,7 @@ const App = () => {
     }, [])
     
     const countMatchingCountries = () => {
-        if (matchingCountries.length > 10 || matchingCountries.length == 0) {
+        if (matchingCountries.length > 10 || matchingCountries.length === 0) {
             return false
         }
         else
