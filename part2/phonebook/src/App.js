@@ -13,10 +13,10 @@ const App = () => {
     const [newSearch, setNewSearch] = useState('')
     
     useEffect(() => {
-      axios
-        .get('http://localhost:3001/persons')
+      contactService
+        .getAll()
         .then(response => {
-          setPersons(response.data)
+          setPersons(response)
         })
     }, [])
 
@@ -34,7 +34,6 @@ const App = () => {
       {
         if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one? `)){
           let personId = 0;
-          //let personId2 = Object.values(persons).indexOf(newName)
           for (let i = 0; i < persons.length; i++) {
             if(newName === persons[i].name)
             {
@@ -42,7 +41,6 @@ const App = () => {
             }
           }
           console.log(personId)
-          //console.log(personId2)
           const noteObject = {
             name: newName,
             number: newNumber
