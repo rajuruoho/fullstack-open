@@ -4,6 +4,8 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+import contactService from './services/contactInformation'
+
 const App = () => {
     const [persons, setPersons] = useState([]);
     const [newName, setNewName] = useState('')
@@ -17,25 +19,77 @@ const App = () => {
           setPersons(response.data)
         })
     }, [])
+
     const addPerson = (event) => {
-    event.preventDefault()
-    if(persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase()))
-    {
-        window.alert(`${newName} is already added to phonebook`);
-        return
-    }
-    const noteObject = {
-      name: newName,
-      number: newNumber
-    }
-    setPersons(persons.concat(noteObject))
-    setNewName('')
-    setNewNumber('')
+      event.preventDefault()
+      const personExists = persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase())
+      const personsNumberExists = persons.map(person => person.number).includes(newNumber)
+      if(personExists && personsNumberExists)
+      {
+          window.alert(`${newName} and number ${newNumber} is already added to phonebook`);
+          return
+      }
+      //Do not take in to account if many people have the same number
+      if(personExists && !personsNumberExists)
+      {
+        if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one? `)){
+          let personId = 0;
+          //let personId2 = Object.values(persons).indexOf(newName)
+          for (let i = 0; i < persons.length; i++) {
+            if(newName === persons[i].name)
+            {
+              personId = persons[i].id
+            }
+          }
+          console.log(personId)
+          //console.log(personId2)
+          const noteObject = {
+            name: newName,
+            number: newNumber
+          }
+          contactService
+            .update(personId, noteObject)
+            .then(() => {
+              contactService
+                .getAll()
+                .then(response => {
+                  setPersons(response)
+                })
+          })
+          setNewName('')
+          setNewNumber('')
+          return
+        }
+      }
+
+      const noteObject = {
+        name: newName,
+        number: newNumber
+      }
+     contactService
+        .create(noteObject)
+        .then(returnedContact => {
+          setPersons(persons.concat(returnedContact))
+          setNewName('')
+          setNewNumber('')
+     })
     }
     
     const handleNameChange = (event) => {setNewName(event.target.value)}
     const handleNumberChange = (event) => {setNewNumber(event.target.value)}
     const handleSearchChange = (event) => {setNewSearch(event.target.value)}
+
+    const deleteContact = async (id, name) => {
+      if(window.confirm(`Delete ${name} ?`)){
+        await axios.delete(`http://localhost:3001/persons/${id}`)
+        
+        contactService
+        .getAll()
+        .then(response => {
+          setPersons(response)
+        })
+      } 
+    }
 
   return (
     <div>
@@ -44,11 +98,10 @@ const App = () => {
       <h2>Add a new</h2>  
         <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons newSearch={newSearch} persons={persons} />
+      <Persons newSearch={newSearch} persons={persons} deleteContact={deleteContact}/>
     </div>
   )
 
 }
 
 export default App
-
