@@ -1,6 +1,13 @@
-const Notification = ({message}) => {
+const Notification = ({message, errorStatus}) => {
+  let messageColor = 'green'
+console.log(errorStatus)
+  if (errorStatus === 1) {
+    messageColor = 'red'
+console.log(messageColor)
+  }
+console.log(messageColor)
   const notificationStyle = {
-    color: 'green',
+    color: messageColor,
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',

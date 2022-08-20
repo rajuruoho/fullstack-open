@@ -22,8 +22,8 @@ const App = () => {
         })
     }, [])
 
-    const notificationMessageHandle = (message) => {
-        setNotificationMessage(message)
+    const notificationMessageHandle = (message, errorStatus) => {
+        setNotificationMessage(message, errorStatus)
         setTimeout(() => {setNotificationMessage(null)}, 5000)
     }
 
@@ -47,7 +47,6 @@ const App = () => {
               personId = persons[i].id
             }
           }
-          console.log(personId)
           const noteObject = {
             name: newName,
             number: newNumber
@@ -60,8 +59,11 @@ const App = () => {
                 .then(response => {
                   setPersons(response)
                 })
+              notificationMessageHandle(`Changed ${newName}'s number to ${newNumber}`, 1) //0
           })
-          notificationMessageHandle(`Changed ${newName}'s number to ${newNumber}`)
+          .catch(error => {
+            notificationMessageHandle(`Failed to change ${newName}'s number to ${newNumber}`, 1)
+          })
           setNewName('')
           setNewNumber('')
           return
@@ -79,8 +81,8 @@ const App = () => {
           setNewName('')
           setNewNumber('')
      })
-     notificationMessageHandle(`Added ${newName}`)
-    }
+     notificationMessageHandle(`Added ${newName}`, 1) //0
+   }
     
     const handleNameChange = (event) => {setNewName(event.target.value)}
     const handleNumberChange = (event) => {setNewNumber(event.target.value)}
@@ -95,7 +97,7 @@ const App = () => {
         .then(response => {
           setPersons(response)
         })
-        notificationMessageHandle(`Deleted ${name}`)
+        notificationMessageHandle(`Deleted ${name}`, 1) //0
       } 
     }
 
