@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 import contactService from './services/contactInformation'
 
@@ -11,6 +12,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newSearch, setNewSearch] = useState('')
+    const [notificationMessage, setNotificationMessage] = useState(null)
     
     useEffect(() => {
       contactService
@@ -19,6 +21,11 @@ const App = () => {
           setPersons(response)
         })
     }, [])
+
+    const notificationMessageHandle = (message) => {
+        setNotificationMessage(message)
+        setTimeout(() => {setNotificationMessage(null)}, 5000)
+    }
 
     const addPerson = (event) => {
       event.preventDefault()
@@ -54,6 +61,7 @@ const App = () => {
                   setPersons(response)
                 })
           })
+          notificationMessageHandle(`Changed ${newName}'s number to ${newNumber}`)
           setNewName('')
           setNewNumber('')
           return
@@ -71,6 +79,7 @@ const App = () => {
           setNewName('')
           setNewNumber('')
      })
+     notificationMessageHandle(`Added ${newName}`)
     }
     
     const handleNameChange = (event) => {setNewName(event.target.value)}
@@ -86,12 +95,14 @@ const App = () => {
         .then(response => {
           setPersons(response)
         })
+        notificationMessageHandle(`Deleted ${name}`)
       } 
     }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
         <Filter newSearch = {newSearch} handleSearchChange={handleSearchChange}/>
       <h2>Add a new</h2>  
         <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
