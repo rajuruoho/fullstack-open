@@ -13,6 +13,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [newSearch, setNewSearch] = useState('')
     const [notificationMessage, setNotificationMessage] = useState(null)
+    const [errorStatus, setErrorStatus] = useState('')
     
     useEffect(() => {
       contactService
@@ -23,7 +24,8 @@ const App = () => {
     }, [])
 
     const notificationMessageHandle = (message, errorStatus) => {
-        setNotificationMessage(message, errorStatus)
+        setNotificationMessage(message)
+        setErrorStatus(errorStatus)
         setTimeout(() => {setNotificationMessage(null)}, 5000)
     }
 
@@ -59,10 +61,10 @@ const App = () => {
                 .then(response => {
                   setPersons(response)
                 })
-              notificationMessageHandle(`Changed ${newName}'s number to ${newNumber}`, 1) //0
+              notificationMessageHandle(`Changed ${newName}'s number to ${newNumber}`, 0)
           })
           .catch(error => {
-            notificationMessageHandle(`Failed to change ${newName}'s number to ${newNumber}`, 1)
+            notificationMessageHandle(`Failed to change ${newName}'s number to ${newNumber}. Information has already been removed from server`, 1)
           })
           setNewName('')
           setNewNumber('')
@@ -81,7 +83,7 @@ const App = () => {
           setNewName('')
           setNewNumber('')
      })
-     notificationMessageHandle(`Added ${newName}`, 1) //0
+     notificationMessageHandle(`Added "${newName}" to phonebook`, 0)
    }
     
     const handleNameChange = (event) => {setNewName(event.target.value)}
@@ -97,19 +99,19 @@ const App = () => {
         .then(response => {
           setPersons(response)
         })
-        notificationMessageHandle(`Deleted ${name}`, 1) //0
+        notificationMessageHandle(`Deleted ${name} from phonebook` , 0)
       } 
     }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+        <Notification message={notificationMessage} errorStatus={errorStatus}/>
         <Filter newSearch = {newSearch} handleSearchChange={handleSearchChange}/>
       <h2>Add a new</h2>  
         <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons newSearch={newSearch} persons={persons} deleteContact={deleteContact}/>
+        <Persons newSearch={newSearch} persons={persons} deleteContact={deleteContact}/>
     </div>
   )
 
