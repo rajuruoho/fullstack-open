@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
-require('dotenv').config()
+const { MONGODB_URI } = require('./utils/config')
+const { info, error } = require('./utils/logger')
 
-if (process.argv.length < 5) {
-  console.log('give all arguments')
+if (process.argv.length > 2 && process.argv.length < 5) {
+  error('give all arguments')
   process.exit(1)
 }
 
@@ -11,9 +12,7 @@ const bAuthor = process.argv[3]
 const bUrl = process.argv[4]
 const bLikes = process.argv[5]
 
-const mongoUrl = process.env.MONGODB_URI
-
-mongoose.connect(mongoUrl)
+mongoose.connect(MONGODB_URI)
 
 const blogSchema = mongoose.Schema({
     title: String,
@@ -32,18 +31,18 @@ const blog = new Blog({
 })
 
 if (process.argv.length === 2) {
-  console.log('bloglist:')
+  info('bloglist:')
   Blog.find({}).then(result => {
     result.forEach(blog => {
-      console.log(`${blog.title} ${blog.author} ${blog.url} ${blog.likes} `)
+      info(`${blog.title} ${blog.author} ${blog.url} ${blog.likes} `)
     })
     mongoose.connection.close()
     //Most likely not the smarterst solution, but otherwise it will add new blog anyway with no arguments
-    process.exit(1)
+    process.exit(0)
+  })
+} else {
+  blog.save().then(result => {
+    info(`added ${bTitle} ${bAuthor} ${bUrl} ${bLikes} to bloglist`)
+    mongoose.connection.close()
   })
 }
-
-blog.save().then(result => {
-  console.log(`added ${bTitle} ${bAuthor} ${bUrl} ${bLikes} to bloglist`)
-  mongoose.connection.close()
-})
