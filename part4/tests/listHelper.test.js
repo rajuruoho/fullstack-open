@@ -73,3 +73,19 @@ describe("Favorite Blog", () => {
     expect(result).toEqual(manyBlogs[2]);
   });
 });
+
+describe("Most Blogs", () => {
+  test("Most Blogs", () => {
+    const result = listHelper.mostBlogs(manyBlogs);
+    expect(result.auth).toEqual("Robert C. Martin");
+    expect(result.blogs).toEqual(3);
+  });
+});
+
+describe("Most Likes", () => {
+  test("Most Likes", () => {
+    const result = listHelper.mostLikes(manyBlogs);
+    expect(result.auth).toEqual("Edsger W. Dijkstra");
+    expect(result.likes).toEqual(17);
+  });
+});
