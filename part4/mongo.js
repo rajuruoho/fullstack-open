@@ -37,7 +37,7 @@ if (process.argv.length === 2) {
       info(`${blog.title} ${blog.author} ${blog.url} ${blog.likes} `)
     })
     mongoose.connection.close()
-    //Most likely not the smarterst solution, but otherwise it will add new blog anyway with no arguments
+    //Most likely not the smartest solution, but otherwise it will add new blog anyway with no arguments
     process.exit(0)
   })
 } else {
