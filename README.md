@@ -1,6 +1,8 @@
-## Fullstack Open 2022 exercise submissions for Dr. Jaska and rajuruoho
+## Fullstack Open 2022-2023 exercise submissions for Dr. Jaska and rajuruoho
 
-Unless stated otherwise everything was done in pairwork regardless of git authors.
+Unless stated otherwise everything was done in pairwork regardless of git authors up to exercise 4.12
+
+Starting from exercise 4.13, done by rajuruoho only
 
 Collaborators:
 
