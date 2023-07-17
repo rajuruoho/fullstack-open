@@ -1,6 +1,7 @@
 const listHelper = require("../utils/list_helper");
-const { manyBlogs } = require('./blogsForTesting.js')
+const { manyBlogs } = require('./blogstest_helper.js')
 
+//assignment 4.3
 test("dummy returns one", () => {
   const blogs = [];
 
@@ -8,6 +9,7 @@ test("dummy returns one", () => {
   expect(result).toBe(1);
 });
 
+//Assignment 4.4
 describe("total likes", () => {
   test("blog likes", () => {
     const result = listHelper.totalLikes(manyBlogs);
@@ -15,6 +17,7 @@ describe("total likes", () => {
   });
 });
 
+//Assignment 4.5
 describe("Favorite Blog", () => {
   test("Favorite Blog is", () => {
     const result = listHelper.favoriteBlog(manyBlogs);
@@ -22,6 +25,7 @@ describe("Favorite Blog", () => {
   });
 });
 
+//Assignment 4.6
 describe("Most Blogs", () => {
   test("Most Blogs", () => {
     const result = listHelper.mostBlogs(manyBlogs);
@@ -30,6 +34,7 @@ describe("Most Blogs", () => {
   });
 });
 
+//Assignment 4.7
 describe("Most Likes", () => {
   test("Most Likes", () => {
     const result = listHelper.mostLikes(manyBlogs);

@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
 const supertest = require("supertest");
+const mongoose = require("mongoose");
+const { manyBlogs, blogsInDb } = require("./blogstest_helper.js");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
-const { manyBlogs } = require("./blogsForTesting.js");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -35,10 +35,8 @@ test("blogs are returned as json and have 6 in total", async () => {
 test("blog has id and its in right form", async () => {
   const response = await api.get("/api/blogs");
 
-  response.body.map(
-    (blog) => expect(blog.id).toBeDefined())
-  response.body.map(
-    (blog) => expect(blog._id).toBeUndefined())
+  response.body.map((blog) => expect(blog.id).toBeDefined());
+  response.body.map((blog) => expect(blog._id).toBeUndefined());
 });
 
 //Assignment 4.10-4.11
@@ -51,8 +49,11 @@ test("blog without likes will get 0 likes automatically", async () => {
 
   await api.post("/api/blogs").send(newBlog).expect(201);
 
-  const response = await api.get("/api/blogs");
-  expect(response.body).toHaveLength(manyBlogs.length + 1);
+  const blogsAtEnd = await blogsInDb();
+  expect(blogsAtEnd).toHaveLength(manyBlogs.length + 1);
+
+  const likes = blogsAtEnd.map((r) => r.likes);
+  expect(likes[manyBlogs.length + 1]) === 0;
 });
 
 //Assignment 4.12
@@ -63,24 +64,50 @@ test("blogs must have fields title, author and url", async () => {
     author: "minahan se",
     likes: 69,
   };
-
   await api.post("/api/blogs").send(newBlog).expect(400);
+
   //authorless
   newBlog = {
     title: "rahkaa todellakin",
     url: "rahka.com",
     likes: 69,
   };
-
   await api.post("/api/blogs").send(newBlog).expect(400);
+
   //titleless
   newBlog = {
     author: "minahan se",
     url: "rahka.com",
     likes: 69,
   };
-
   await api.post("/api/blogs").send(newBlog).expect(400);
+});
+
+//Assignment 4.13
+test("can delete blogs", async () => {
+  const blogsAtStart = await blogsInDb();
+  const blogToDelete = blogsAtStart[5];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const blogsAtEnd = await blogsInDb();
+  expect(blogsAtEnd).toHaveLength(manyBlogs.length - 1);
+
+  const likes = blogsAtEnd.map((r) => r.title);
+  expect(likes).not.toContain(blogToDelete.title);
+});
+
+//Assignment 4.14
+test("can alter the amount of likes of a blog", async () => {
+  const blogsAtStart = await blogsInDb();
+  const blogWithAlteredLikes = blogsAtStart[4];
+  blogWithAlteredLikes.likes = 2;
+
+  await api.put(`/api/blogs/${blogWithAlteredLikes.id}`)
+  .send(blogWithAlteredLikes).expect(200);
+
+  const blogsNow = await blogsInDb();
+  expect(blogsNow[4].likes).toEqual(2);
 });
 
 test("all blogs are returned", async () => {
@@ -92,9 +119,9 @@ test("all blogs are returned", async () => {
 test("a specific blog is within the returned blogs", async () => {
   const response = await api.get("/api/blogs");
 
-  const titles = response.body.map((r) => r.title);
+  const likes = response.body.map((r) => r.title);
 
-  expect(titles).toContain("Type wars");
+  expect(likes).toContain("Type wars");
 });
 
 afterAll(async () => {
