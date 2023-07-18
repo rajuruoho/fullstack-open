@@ -7,18 +7,7 @@ const Blog = require("../models/blog");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObject = new Blog(manyBlogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(manyBlogs[1]);
-  await blogObject.save();
-  blogObject = new Blog(manyBlogs[2]);
-  await blogObject.save();
-  blogObject = new Blog(manyBlogs[3]);
-  await blogObject.save();
-  blogObject = new Blog(manyBlogs[4]);
-  await blogObject.save();
-  blogObject = new Blog(manyBlogs[5]);
-  await blogObject.save();
+  await Blog.insertMany(manyBlogs);
 });
 
 //Assignment 4.8
@@ -103,8 +92,10 @@ test("can alter the amount of likes of a blog", async () => {
   const blogWithAlteredLikes = blogsAtStart[4];
   blogWithAlteredLikes.likes = 2;
 
-  await api.put(`/api/blogs/${blogWithAlteredLikes.id}`)
-  .send(blogWithAlteredLikes).expect(200);
+  await api
+    .put(`/api/blogs/${blogWithAlteredLikes.id}`)
+    .send(blogWithAlteredLikes)
+    .expect(200);
 
   const blogsNow = await blogsInDb();
   expect(blogsNow[4].likes).toEqual(2);
